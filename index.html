@@ -1,20 +1,20 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Stranger Things | Fan Experience</title>
 
     <!-- Basic SEO -->
-    <meta
-        name="description"
-        content="A Stranger Things fan website featuring an interactive hero slider with actors, characters, and an Upside Down theme toggle."
-    />
+    <meta name="description"
+        content="A Stranger Things fan website featuring an interactive hero slider with actors, characters, and an Upside Down theme toggle." />
 
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="css/style.css" />
-
+    <link rel="stylesheet" href="css/theme-effects.css" />
+    <link rel="stylesheet" href="css/theme-effects.css">
     <!-- Preload key hero images -->
     <link rel="preload" href="images/eleven.png" as="image" />
     <link rel="preload" href="images/millie.png" as="image" />
@@ -27,7 +27,10 @@
     <!-- Optional favicon -->
     <!-- <link rel="icon" href="images/favicon.ico" /> -->
 </head>
+
 <body class="normal-theme">
+    <!-- Theme Transition Overlay -->
+    <div class="theme-transition"></div>
     <!-- Skip link for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
 
@@ -51,13 +54,8 @@
             </nav>
 
             <!-- Upside Down theme toggle -->
-            <button
-                class="theme-toggle"
-                id="upsideDownToggle"
-                type="button"
-                aria-pressed="false"
-                aria-label="Toggle Upside Down mode"
-            >
+            <button class="theme-toggle" id="upsideDownToggle" type="button" aria-pressed="false"
+                aria-label="Toggle Upside Down mode">
                 Upside Down
             </button>
         </div>
@@ -65,17 +63,10 @@
 
     <main id="main-content">
         <!-- Hero Section: Actor / Character slider -->
-        <section
-            class="hero-section"
-            aria-label="Stranger Things character spotlight slider"
-        >
+        <section class="hero-section" aria-label="Stranger Things character spotlight slider">
             <div class="hero-container">
                 <!-- Previous character -->
-                <button
-                    class="nav-arrow prev-arrow"
-                    type="button"
-                    aria-label="Previous character"
-                >
+                <button class="nav-arrow prev-arrow" type="button" aria-label="Previous character">
                     &#10094;
                 </button>
 
@@ -90,33 +81,112 @@
 
                     <div class="character-cutout">
                         <!-- Image updated by JS -->
-                        <img
-                            src=""
-                            alt="Stranger Things character"
-                            class="character-image"
-                            loading="eager"
-                        />
+                        <img src="" alt="Stranger Things character" class="character-image" loading="eager" />
                     </div>
                 </div>
 
                 <!-- Next character -->
-                <button
-                    class="nav-arrow next-arrow"
-                    type="button"
-                    aria-label="Next character"
-                >
+                <button class="nav-arrow next-arrow" type="button" aria-label="Next character">
                     &#10095;
                 </button>
 
                 <!-- Slider dots (JS will populate) -->
-                <div
-                    class="slider-dots"
-                    role="tablist"
-                    aria-label="Select character slide"
-                ></div>
+                <div class="slider-dots" role="tablist" aria-label="Select character slide"></div>
+            </div>
+        </section>
+        <!-- Featured Section -->
+        <section class="featured-section" aria-label="Featured Content">
+            <div class="container">
+                <h2 class="section-title">Welcome to Hawkins</h2>
+                <div class="featured-grid">
+                    <div class="featured-card">
+                        <div class="card-image">
+                            <img src="images/about.png" alt="About Stranger Things" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>About the Show</h3>
+                            <p>When a young boy vanishes, a small town uncovers a mystery involving secret experiments,
+                                terrifying supernatural forces, and one strange little girl.</p>
+                            <a href="#" class="btn">Learn More</a>
+                        </div>
+                    </div>
+                    <div class="featured-card">
+                        <div class="card-image">
+                            <img src="images/upside.png" alt="The Upside Down" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <h3>The Upside Down</h3>
+                            <p>A dark, decaying, and dangerous dimension that exists in parallel to the human world,
+                                home to the Demogorgon and other creatures.</p>
+                            <a href="#" class="btn">Explore</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Character Gallery -->
+        <section class="gallery-section" aria-label="Character Gallery">
+            <div class="container">
+                <h2 class="section-title">Meet the Characters</h2>
+                <div class="gallery-grid" id="characterGallery">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section" aria-label="Newsletter Signup">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Stay Updated</h2>
+                    <p>Subscribe to our newsletter for the latest news and updates from Hawkins.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit" class="btn">Subscribe</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Stranger Things</h3>
+                    <p>Created by The Duffer Brothers</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="about-hawkins.html">About Hawkins</a></li>
+                        <li><a href="episodes.html">Episodes</a></li>
+                        <li><a href="villains.html">Villains</a></li>
+                    </ul>
+                </div>
+                <div class="social-links">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Facebook">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" aria-label="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 Stranger Things. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <noscript>
         <div class="noscript-warning">
@@ -125,13 +195,13 @@
         </div>
     </noscript>
 
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <!-- Anime.js (used for transitions) -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
         integrity="sha512-98kYI8k9P2jP6J7lN3U0GmIhZGOmM+lpTgk5JYWV9k5qEt8XZ5LmxrjY4uUeW/0HYPYTd7G7aaJkX7r3v4P0wQ=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"
-    ></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Background Music -->
     <audio id="upsideDownMusic" loop>
@@ -139,7 +209,40 @@
         Your browser does not support the audio element.
     </audio>
 
-    <!-- Main script (make sure folder is 'js', not 'Js') -->
+    <!-- Main script -->
     <script src="js/script.js" type="module"></script>
+    <script src="js/theme.js" type="module"></script>
+
+    <!-- Initialize character gallery -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const characterGallery = document.getElementById('characterGallery');
+            if (characterGallery) {
+                const characters = [
+                    { name: 'Eleven', image: 'images/11.png' },
+                    { name: 'Mike Wheeler', image: 'images/mike.png' },
+                    { name: 'Dustin Henderson', image: 'images/dustin.png' },
+                    { name: 'Lucas Sinclair', image: 'images/lucas.png' },
+                    { name: 'Max Mayfield', image: 'images/max.png' },
+                    { name: 'Will Byers', image: 'images/will.png' },
+                    { name: 'Jim Hopper', image: 'images/hopper.png' },
+                    { name: 'Joyce Byers', image: 'images/joyce.png' }
+                ];
+
+                characters.forEach(character => {
+                    const characterCard = document.createElement('div');
+                    characterCard.className = 'character-card';
+                    characterCard.innerHTML = `
+                        <div class="character-image">
+                            <img src="${character.image}" alt="${character.name}" loading="lazy">
+                        </div>
+                        <h3>${character.name}</h3>
+                    `;
+                    characterGallery.appendChild(characterCard);
+                });
+            }
+        });
+    </script>
 </body>
+
 </html>
