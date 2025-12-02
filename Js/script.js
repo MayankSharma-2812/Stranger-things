@@ -43,24 +43,24 @@ document.addEventListener('DOMContentLoaded', () => {
             characterSubtitle: 'The Chief of Police',
             actorSubtitle: 'Actor • Jim Hopper',
             characterDescription:
-                'Jim Hopper is Hawkins’ gruff but big-hearted police chief who becomes a father figure to Eleven and a key defender of the town.',
+                "Jim Hopper is Hawkins' gruff but big-hearted police chief who becomes a father figure to Eleven and a key defender of the town.",
             actorDescription:
-                'David Harbour portrays Jim Hopper, the complex, world-weary sheriff with a hidden soft side.',
+                "David Harbour brings depth to Chief Hopper, balancing his tough exterior with a deeply caring nature.",
             images: {
                 normal: 'images/david.png',
-                upsideDown: 'images/hopper.png'
+                upsideDown: 'images/Hopper.png'
             }
         },
         {
             id: 'max',
             characterName: 'Max Mayfield',
             actorName: 'Sadie Sink',
-            characterSubtitle: 'The New Girl',
+            characterSubtitle: 'The Skater Girl',
             actorSubtitle: 'Actor • Max Mayfield',
             characterDescription:
-                'Max Mayfield is a tough, independent skater dealing with her own trauma while becoming a crucial member of the Party.',
+                'Max Mayfield is a tough, independent skater who joins the Party and becomes an integral part of the group.',
             actorDescription:
-                'Sadie Sink plays Max Mayfield, delivering one of the show’s most emotionally intense performances.',
+                'Sadie Sink delivers a powerful performance as Max, capturing her strength and vulnerability.',
             images: {
                 normal: 'images/sadie.png',
                 upsideDown: 'images/max.png'
@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dotsContainer = document.querySelector('.slider-dots');
 
     const themeToggleBtn = document.getElementById('upsideDownToggle');
-    const upsideDownMusic = document.getElementById('upsideDownMusic');
 
     // Guard: if hero elements are missing, exit gracefully
     if (
@@ -116,54 +115,79 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.toggle('upside-down-theme', isUpsideDown);
         body.classList.toggle('normal-theme', !isUpsideDown);
 
-        // Control audio based on theme
-        if (upsideDownMusic) {
-            if (isUpsideDown) {
-                // When switching to Upside Down, try to play the music
-                const playPromise = upsideDownMusic.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.catch(error => {
-                        console.log('Audio play failed, will try again on user interaction');
-                        // We'll try again when user interacts
-                    });
-                }
-                
-                // Unmute when we have user interaction
-                const unmuteOnInteraction = () => {
-                    if (upsideDownMusic.muted) {
-                        upsideDownMusic.muted = false;
-                    }
-                    document.removeEventListener('click', unmuteOnInteraction);
-                    document.removeEventListener('keydown', unmuteOnInteraction);
-                };
-                
-                document.addEventListener('click', unmuteOnInteraction, { once: true });
-                document.addEventListener('keydown', unmuteOnInteraction, { once: true });
-            } else {
-                // When switching back to normal theme, pause and reset the music
-                upsideDownMusic.pause();
-                upsideDownMusic.currentTime = 0;
-                upsideDownMusic.muted = true; // Mute when not in use
-            }
-        }
-
         if (themeToggleBtn) {
             themeToggleBtn.setAttribute('aria-pressed', String(isUpsideDown));
         }
     };
 
-    const toggleTheme = () => {
+    const toggleTheme = async () => {
+        const music = document.getElementById('upsideDownMusic');
+        
+        // Create transition overlay if it doesn't exist
+        let overlay = document.querySelector('.theme-transition');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'theme-transition';
+            document.body.appendChild(overlay);
+        }
+
+        // Show overlay
+        overlay.style.display = 'block';
+        void overlay.offsetWidth; // Trigger reflow
+        overlay.classList.add('active');
+
+        // Wait for the fade in to complete
+        await new Promise(resolve => setTimeout(resolve, 400));
+
+        // Toggle theme
+        const wasUpsideDown = isUpsideDown;
         isUpsideDown = !isUpsideDown;
+        
+        // Handle music based on the new state
+        if (music) {
+            if (isUpsideDown && !wasUpsideDown) {
+                // Fade in music when going to Upside Down
+                try {
+                    music.volume = 0;
+                    await music.play();
+                    // Fade in volume
+                    const fadeIn = setInterval(() => {
+                        if (music.volume < 0.5) {
+                            music.volume += 0.05;
+                        } else {
+                            clearInterval(fadeIn);
+                        }
+                    }, 100);
+                } catch (error) {
+                    console.error('Error playing audio:', error);
+                }
+            } else if (!isUpsideDown && wasUpsideDown) {
+                // Fade out music when returning to normal
+                const fadeOut = setInterval(() => {
+                    if (music.volume > 0.1) {
+                        music.volume -= 0.05;
+                    } else {
+                        music.pause();
+                        music.currentTime = 0;
+                        clearInterval(fadeOut);
+                    }
+                }, 100);
+            }
+        }
+        
         applyThemeClasses();
         updateSlideContent();
+
+        // Wait for theme changes to apply
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // Fade out overlay
+        overlay.classList.remove('active');
         
-        // Save theme preference
-        try {
-            localStorage.setItem('strangerThingsTheme', isUpsideDown ? 'upside-down' : 'normal');
-        } catch (e) {
-            console.warn('Could not save theme preference:', e);
-        }
+        // Remove overlay after animation completes
+        setTimeout(() => {
+            overlay.style.display = 'none';
+        }, 800);
     };
 
     // ----------------------------
@@ -331,29 +355,36 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------
     const init = () => {
         createDots();
-        
-        // Load saved theme preference
-        try {
-            const savedTheme = localStorage.getItem('strangerThingsTheme');
-            if (savedTheme === 'upside-down') {
-                isUpsideDown = true;
-            }
-        } catch (e) {
-            console.warn('Could not load theme preference:', e);
-        }
-        
-        // Initialize audio element
-        if (upsideDownMusic) {
-            // Set volume to a reasonable level (0.0 to 1.0)
-            upsideDownMusic.volume = 0.5;
-            
-            // Try to preload audio
-            upsideDownMusic.load();
-        }
-        
         applyThemeClasses();
         updateSlideContent();
         addEventListeners();
+        
+        // Initialize audio and handle autoplay restrictions
+        const music = document.getElementById('upsideDownMusic');
+        if (music) {
+            // Try to unlock audio on first user interaction
+            const unlockAudio = () => {
+                // Set volume to 0 and try to play
+                music.volume = 0;
+                const playPromise = music.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        // Immediately pause and reset
+                        music.pause();
+                        music.currentTime = 0;
+                    }).catch(error => {
+                        console.log('Audio autoplay prevention:', error);
+                    });
+                }
+                // Remove event listeners after first interaction
+                document.removeEventListener('click', unlockAudio);
+                document.removeEventListener('keydown', unlockAudio);
+            };
+            
+            // Add event listeners for first user interaction
+            document.addEventListener('click', unlockAudio, { once: true });
+            document.addEventListener('keydown', unlockAudio, { once: true });
+        }
     };
 
     init();

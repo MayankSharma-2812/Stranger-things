@@ -38,14 +38,36 @@
 }
 
 body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: var(--bg-color);
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  min-height: 100vh;
   overflow-x: hidden;
-  transition: var(--transition-base);
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  will-change: background-color, color, filter;
+}
+
+/* Theme transition overlay */
+.theme-transition {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-transition.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* Skip link */
