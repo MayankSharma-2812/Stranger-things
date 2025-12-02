@@ -1,27 +1,139 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stranget Things</title>
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stranger Things | Fan Experience</title>
+
+    <!-- Basic SEO -->
+    <meta
+        name="description"
+        content="A Stranger Things fan website featuring an interactive hero slider with actors, characters, and an Upside Down theme toggle."
+    />
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Preload key hero images -->
+    <link rel="preload" href="images/eleven.png" as="image" />
+    <link rel="preload" href="images/millie.png" as="image" />
+    <link rel="preload" href="images/fin.png" as="image" />
+    <link rel="preload" href="images/mike.png" as="image" />
+    <link rel="preload" href="images/stranger-things-1.jpg" as="image" />
+    <link rel="preload" href="images/stranger-things-2.jpg" as="image" />
+    <link rel="preload" href="images/stranger-things-3.jpg" as="image" />
+
+    <!-- Optional favicon -->
+    <!-- <link rel="icon" href="images/favicon.ico" /> -->
 </head>
-<body>
-<div>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="About-Hawkins.html">About Hawkins</a></li>
-                <li><a href="Episodes.html">Episodes</a></li>
-                <li><a href="Villians.html">Villians</a></li>
-            </ul>
-        </nav>
+<body class="normal-theme">
+    <!-- Skip link for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header / Navigation -->
+    <header class="site-header">
+        <div class="site-header-inner">
+            <div class="branding">
+                <a href="index.html" class="brand-link" aria-label="Stranger Things home">
+                    <span class="brand-title">Stranger Things</span>
+                </a>
+            </div>
+
+            <nav class="main-nav" aria-label="Primary navigation">
+                <ul class="nav-list">
+                    <!-- Adjust hrefs to your actual pages -->
+                    <li><a href="index.html" class="nav-link nav-link--active">Home</a></li>
+                    <li><a href="about-hawkins.html" class="nav-link">About Hawkins</a></li>
+                    <li><a href="episodes.html" class="nav-link">Episodes</a></li>
+                    <li><a href="villains.html" class="nav-link">Villains</a></li>
+                </ul>
+            </nav>
+
+            <!-- Upside Down theme toggle -->
+            <button
+                class="theme-toggle"
+                id="upsideDownToggle"
+                type="button"
+                aria-pressed="false"
+                aria-label="Toggle Upside Down mode"
+            >
+                Upside Down
+            </button>
+        </div>
     </header>
-</div>
 
+    <main id="main-content">
+        <!-- Hero Section: Actor / Character slider -->
+        <section
+            class="hero-section"
+            aria-label="Stranger Things character spotlight slider"
+        >
+            <div class="hero-container">
+                <!-- Previous character -->
+                <button
+                    class="nav-arrow prev-arrow"
+                    type="button"
+                    aria-label="Previous character"
+                >
+                    &#10094;
+                </button>
 
+                <!-- Hero content -->
+                <div class="hero-content">
+                    <div class="text-box">
+                        <!-- Filled by JS -->
+                        <h1 class="character-name">Loading...</h1>
+                        <h2 class="character-role"></h2>
+                        <p class="character-description"></p>
+                    </div>
 
-<script src="Js/script.js"></script>
+                    <div class="character-cutout">
+                        <!-- Image updated by JS -->
+                        <img
+                            src=""
+                            alt="Stranger Things character"
+                            class="character-image"
+                            loading="eager"
+                        />
+                    </div>
+                </div>
+
+                <!-- Next character -->
+                <button
+                    class="nav-arrow next-arrow"
+                    type="button"
+                    aria-label="Next character"
+                >
+                    &#10095;
+                </button>
+
+                <!-- Slider dots (JS will populate) -->
+                <div
+                    class="slider-dots"
+                    role="tablist"
+                    aria-label="Select character slide"
+                ></div>
+            </div>
+        </section>
+    </main>
+
+    <noscript>
+        <div class="noscript-warning">
+            This Stranger Things experience uses JavaScript for the hero slider and Upside Down mode.
+            Please enable JavaScript to see all features.
+        </div>
+    </noscript>
+
+    <!-- Anime.js (used for transitions) -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+        integrity="sha512-98kYI8k9P2jP6J7lN3U0GmIhZGOmM+lpTgk5JYWV9k5qEt8XZ5LmxrjY4uUeW/0HYPYTd7G7aaJkX7r3v4P0wQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+
+    <!-- Main script (make sure folder is 'js', not 'Js') -->
+    <script src="js/script.js" type="module"></script>
 </body>
 </html>
