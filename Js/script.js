@@ -47,8 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actorDescription:
                 'David Harbour portrays Jim Hopper, the complex, world-weary sheriff with a hidden soft side.',
             images: {
-                normal: 'images/david.png',      // actor
-                upsideDown: 'images/hopper.png'  // character
+                normal: 'images/david.png',
+                upsideDown: 'images/hopper.png'
             }
         },
         {
@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             actorDescription:
                 'Sadie Sink plays Max Mayfield, delivering one of the show’s most emotionally intense performances.',
             images: {
-                normal: 'images/sadie.png',     // actor
-                upsideDown: 'images/max.png'    // character
+                normal: 'images/sadie.png',
+                upsideDown: 'images/max.png'
             }
         }
     ];
@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dotsContainer = document.querySelector('.slider-dots');
 
     const themeToggleBtn = document.getElementById('upsideDownToggle');
+    const upsideDownMusic = document.getElementById('upsideDownMusic');
 
     // Guard: if hero elements are missing, exit gracefully
     if (
@@ -115,6 +116,38 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.toggle('upside-down-theme', isUpsideDown);
         body.classList.toggle('normal-theme', !isUpsideDown);
 
+        // Control audio based on theme
+        if (upsideDownMusic) {
+            if (isUpsideDown) {
+                // When switching to Upside Down, try to play the music
+                const playPromise = upsideDownMusic.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Audio play failed, will try again on user interaction');
+                        // We'll try again when user interacts
+                    });
+                }
+                
+                // Unmute when we have user interaction
+                const unmuteOnInteraction = () => {
+                    if (upsideDownMusic.muted) {
+                        upsideDownMusic.muted = false;
+                    }
+                    document.removeEventListener('click', unmuteOnInteraction);
+                    document.removeEventListener('keydown', unmuteOnInteraction);
+                };
+                
+                document.addEventListener('click', unmuteOnInteraction, { once: true });
+                document.addEventListener('keydown', unmuteOnInteraction, { once: true });
+            } else {
+                // When switching back to normal theme, pause and reset the music
+                upsideDownMusic.pause();
+                upsideDownMusic.currentTime = 0;
+                upsideDownMusic.muted = true; // Mute when not in use
+            }
+        }
+
         if (themeToggleBtn) {
             themeToggleBtn.setAttribute('aria-pressed', String(isUpsideDown));
         }
@@ -124,6 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
         isUpsideDown = !isUpsideDown;
         applyThemeClasses();
         updateSlideContent();
+        
+        // Save theme preference
+        try {
+            localStorage.setItem('strangerThingsTheme', isUpsideDown ? 'upside-down' : 'normal');
+        } catch (e) {
+            console.warn('Could not save theme preference:', e);
+        }
     };
 
     // ----------------------------
@@ -291,6 +331,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // ----------------------------
     const init = () => {
         createDots();
+        
+        // Load saved theme preference
+        try {
+            const savedTheme = localStorage.getItem('strangerThingsTheme');
+            if (savedTheme === 'upside-down') {
+                isUpsideDown = true;
+            }
+        } catch (e) {
+            console.warn('Could not load theme preference:', e);
+        }
+        
+        // Initialize audio element
+        if (upsideDownMusic) {
+            // Set volume to a reasonable level (0.0 to 1.0)
+            upsideDownMusic.volume = 0.5;
+            
+            // Try to preload audio
+            upsideDownMusic.load();
+        }
+        
         applyThemeClasses();
         updateSlideContent();
         addEventListeners();
@@ -298,4 +358,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
-    
